@@ -35,8 +35,7 @@ public class FormularioActivity extends AppCompatActivity {
             helper.preencheFormulario(aluno);
         }
 
-
-
+        /*
         Button botaoSalvar = (Button) findViewById(R.id.formulario_salvar);
         botaoSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +44,7 @@ public class FormularioActivity extends AppCompatActivity {
                 finish(); //Finaliza e destrói activity
             }
         });
+       */
     }
 
     //Método criado para dizer quais são intens no menu que irão aparecer

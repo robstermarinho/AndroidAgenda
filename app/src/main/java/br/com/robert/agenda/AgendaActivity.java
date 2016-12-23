@@ -1,6 +1,7 @@
 package br.com.robert.agenda;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -17,62 +18,43 @@ import java.util.List;
 import br.com.robert.agenda.dao.AlunoDAO;
 import br.com.robert.agenda.modelo.Aluno;
 
-//No android as classes herdam de Uma Activity
-public class AgendaActivity extends AppCompatActivity {
 
-    private ListView ListaAlunos;
+public class AgendaActivity extends AppCompatActivity {                                 //No android as classes herdam de Uma Activity
+
+
+    private ListView ListaAlunos;                                                       //Lista de Alunos
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // É necessário chamar o super para recuperar o comportamento de onCreate da classe pai
-        super.onCreate(savedInstanceState);
-        //R são os Resources - Recursos
-        setContentView(R.layout.activity_agenda);
+
+        super.onCreate(savedInstanceState);                                             //É necessário recuperar o comportamento do onCreate da classe pai
+        setContentView(R.layout.activity_agenda);                                       //R são os Resources que recuperam layout em XML
         ListaAlunos = (ListView) findViewById(R.id.lista_alunos);
 
-        //Clique simples em algum item da lista
-        ListaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ListaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {      //Clique simples em algum item da lista
             @Override
             public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
-                Aluno aluno = (Aluno) ListaAlunos.getItemAtPosition(position);
-                Toast.makeText(AgendaActivity.this, "Clique em " + aluno.getNome(), Toast.LENGTH_SHORT).show();
+                Aluno aluno = (Aluno) ListaAlunos.getItemAtPosition(position);          //Recupera a posição do item na lista
 
-                Intent intentVaiProFormulario = new Intent(AgendaActivity.this, FormularioActivity.class);
-                intentVaiProFormulario.putExtra("aluno", aluno);
+                Intent intentVaiProFormulario = new Intent(AgendaActivity.this, FormularioActivity.class); //Intenção para uma Activity formulário
+                intentVaiProFormulario.putExtra("aluno", aluno);                        //Adiciona conteúdo extra para essa intent pra que seja recuperad
                 startActivity(intentVaiProFormulario);
-
             }
         });
-        //Clique longo no item da lista
-        ListaAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+        ListaAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {//Clique longo no item da lista
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(AgendaActivity.this, "Clique LONGO ", Toast.LENGTH_SHORT).show();
-                return false;   //FALSE se vc quer que outros métodos utilizem
-                                //TRUE se vc quer que só ele utilize
+                return false;                                                             //FALSE se vc quer que outros métodos utilizem | TRUE se vc quer que só ele utilize
             }
         });
 
-
-        //carregaLista();
-
-        //Tenho que registrar a lista como alguém que tenha um menu de contexto
-        registerForContextMenu(ListaAlunos);
-
-/*
-        //Populando lista pelo código via string
-        String[] alunos = {"Robert", "Albert", "Cássia", "Victória", "Graça", "Lúcia", "Thales", "Joana", "Duda", "Nuna", "Net","Robert", "Albert", "Cássia", "Victória", "Graça", "Lúcia", "Thales", "Joana", "Duda", "Nuna", "Net"};
-        //Casting pois eu tenho certeza que o tipo View genérico retornado pe função será do tipo ListView
-        ListView ListaAlunos = (ListView) findViewById(R.id.lista_alunos);
-        //Array adapter para transformar essas strings em componentes da view
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
-        ListaAlunos.setAdapter(adapter);
-*/
+        registerForContextMenu(ListaAlunos);                                              //Registrar a lista como alguém que tenha um menu de contexto
 
 
 
-        //Instancia botão pelo ID
-        Button novoAluno = (Button) findViewById(R.id.novo_aluno);
+        Button novoAluno = (Button) findViewById(R.id.novo_aluno);                         //Instancia botão pelo ID
         novoAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,30 +64,27 @@ public class AgendaActivity extends AppCompatActivity {
             }
         });
 
-
+        /***Lista carregada no onResume(); ***/
     }
 
-
-    /* É necessário escrever novamente a ação de buscar a lista dentro do onResume do android
-    *  pq é a partir dele que a a activity volta depois de uma pausa
+    /* É necessário sbrescrever o método onResume para que ele descreva a ação de buscar a lista.
+    *  No android, é a partir desse método que a a activity volta depois de uma pausa
     */
     @Override
     protected void onResume() {
         super.onResume();
         carregaLista();
     }
+
     private void carregaLista() {
-        //Populando lista pelo código via DAO
-        AlunoDAO dao = new AlunoDAO(this);
+
+        AlunoDAO dao = new AlunoDAO(this);          //Populando lista pelo código via DAO
         List<Aluno> alunos = dao.buscaAlunos();
         dao.close();
 
-        //Antes a lista de alunos era local, agora ela virou um atributo da classe para ser acesssado por todos.
-        //ListView ListaAlunos = (ListView) findViewById(R.id.lista_alunos);
-        ArrayAdapter<Aluno> adapter = new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
+        ArrayAdapter<Aluno> adapter = new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos); //Array adapter para transformar os objetos em componentes da view
         ListaAlunos.setAdapter(adapter);
     }
-
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, final ContextMenu.ContextMenuInfo menuInfo) {
@@ -129,15 +108,12 @@ public class AgendaActivity extends AppCompatActivity {
         });
     }
 
-
-/* caso eu tivesse um ID
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.){
-
-        }
-
-        return super.onContextItemSelected(item);
+    @NonNull
+    private ListView carregaListaString() {
+        String[] alunos = {"Robert", "Albert", "Cássia", "Victória", "Graça", "Lúcia"};             //Populando lista pelo código via string
+        ListView ListaAlunos = (ListView) findViewById(R.id.lista_alunos);                          //Casting pois eu tenho certeza que o tipo View genérico retornado pe função será do tipo ListView
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
+        ListaAlunos.setAdapter(adapter);
+        return ListaAlunos;
     }
-*/
 }
