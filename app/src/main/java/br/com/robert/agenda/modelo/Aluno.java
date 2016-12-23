@@ -1,9 +1,13 @@
 package br.com.robert.agenda.modelo;
 
+import java.io.Serializable;
+
 /**
  * Created by robert on 22/12/2016.
+ *
+ * implements Serializable é importante para que o objeto seja convertido em binpario ao sere passado entre as views
  */
-public class Aluno {
+public class Aluno implements Serializable{
     private Long id;
     private String nome;
     private String endereco;

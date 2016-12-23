@@ -22,9 +22,20 @@ public class FormularioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
-
         //Criando um Helper
         helper = new FormularioHelper(this);
+
+
+        //pega a intent e pega o dado serializado com lavbel aluno
+        Intent intent =  getIntent();
+        Aluno aluno = (Aluno) intent.getSerializableExtra("aluno");
+
+        //ou seja se não for um novo aluno
+        if(aluno !=null){
+            helper.preencheFormulario(aluno);
+        }
+
+
 
         Button botaoSalvar = (Button) findViewById(R.id.formulario_salvar);
         botaoSalvar.setOnClickListener(new View.OnClickListener() {
@@ -50,34 +61,22 @@ public class FormularioActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menu_formulario_ok:
 
-                //Pegar os dados em texto aqui mesmo
-                /*
-                EditText campoNome = (EditText) findViewById(R.id.formulario_nome);
-                String nome = campoNome.getText().toString();
-
-                EditText campoEndereco = (EditText) findViewById(R.id.formulario_endereco);
-                String endereco = campoEndereco.getText().toString();
-
-                EditText campoTelefone = (EditText) findViewById(R.id.formulario_telefone);
-                String telefone = campoTelefone.getText().toString();
-
-                EditText campoSite = (EditText) findViewById(R.id.formulario_site);
-                String site = campoSite.getText().toString();
-                */
-
+                AlunoDAO dao = new AlunoDAO(this);
                 //pegar os dados em texto por uma classe separada
                 Aluno aluno = helper.getAluno();
-                AlunoDAO dao = new AlunoDAO(this);
-                dao.insere(aluno);
+
+                //Se for um aluno que já tenha ID - EDITAR
+                if(aluno.getId() !=null){
+                    dao.altera(aluno);
+                    Toast.makeText(FormularioActivity.this, aluno.getNome() + " alterado com sucesso!" , Toast.LENGTH_SHORT).show();
+                }else {
+                    dao.insere(aluno);
+                    Toast.makeText(FormularioActivity.this, aluno.getNome() + " salvo com sucesso!" , Toast.LENGTH_SHORT).show();
+                }
                 dao.close();
-
-                Toast.makeText(FormularioActivity.this, aluno.getNome() + " salvo com sucesso!" , Toast.LENGTH_SHORT).show();
-
-                //Não se preocupar em coisas do banco. instancia o DAO
-
-
                 finish(); //Finaliza e destrói activity
                 break;
+
             case R.id.menu_formulario_msg:
                 Toast.makeText(FormularioActivity.this, "Mensagem linda!!", Toast.LENGTH_LONG).show();
                 finish(); //Finaliza e destrói activity
