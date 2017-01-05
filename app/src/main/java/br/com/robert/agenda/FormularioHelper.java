@@ -45,7 +45,7 @@ public class FormularioHelper  {
         campoSite.setText(aluno.getSite());
         campoNota.setProgress(aluno.getNota().intValue());
 
-        //salva o aluno no atributo privado
-        this.aluno = aluno;
+
+        this.aluno = aluno; //salva o aluno no atributo privado
     }
 }

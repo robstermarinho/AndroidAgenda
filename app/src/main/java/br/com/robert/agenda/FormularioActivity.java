@@ -22,16 +22,13 @@ public class FormularioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
-        //Criando um Helper
-        helper = new FormularioHelper(this);
 
 
-        //pega a intent e pega o dado serializado com lavbel aluno
-        Intent intent =  getIntent();
-        Aluno aluno = (Aluno) intent.getSerializableExtra("aluno");
+        helper = new FormularioHelper(this);                        //Criando um Helper para trabalhar com o formulário
+        Intent intent =  getIntent();                               //recebe algum dado extra via intent
+        Aluno aluno = (Aluno) intent.getSerializableExtra("aluno"); //Dado extra vindo da label aluno
 
-        //ou seja se não for um novo aluno
-        if(aluno !=null){
+        if(aluno !=null){                       //ou seja se não for um novo aluno. Se for a página de editar
             helper.preencheFormulario(aluno);
         }
 
@@ -47,13 +44,12 @@ public class FormularioActivity extends AppCompatActivity {
        */
     }
 
-    //Método criado para dizer quais são intens no menu que irão aparecer
+    //Método criado para dizer quais são itens no menu que irão aparecer
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_formulario, menu);
         return super.onCreateOptionsMenu(menu);
-
     }
 
     @Override
@@ -62,11 +58,9 @@ public class FormularioActivity extends AppCompatActivity {
             case R.id.menu_formulario_ok:
 
                 AlunoDAO dao = new AlunoDAO(this);
-                //pegar os dados em texto por uma classe separada
-                Aluno aluno = helper.getAluno();
+                Aluno aluno = helper.getAluno();            //pegar os dados em texto
 
-                //Se for um aluno que já tenha ID - EDITAR
-                if(aluno.getId() !=null){
+                if(aluno.getId() !=null){                   //Se for um aluno que já tenha ID - EDITAR
                     dao.altera(aluno);
                     Toast.makeText(FormularioActivity.this, aluno.getNome() + " alterado com sucesso!" , Toast.LENGTH_SHORT).show();
                 }else {
@@ -78,7 +72,7 @@ public class FormularioActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_formulario_msg:
-                Toast.makeText(FormularioActivity.this, "Mensagem linda!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(FormularioActivity.this, "Simples mensagem!!", Toast.LENGTH_LONG).show();
                 finish(); //Finaliza e destrói activity
                 break;
         }
