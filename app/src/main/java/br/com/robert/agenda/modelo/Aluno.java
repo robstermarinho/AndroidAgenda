@@ -1,5 +1,7 @@
 package br.com.robert.agenda.modelo;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,18 @@ public class Aluno implements Serializable{
     private String telefone;
     private String site;
     private Double nota;
+    private String caminhofoto;
+
+
+    public String getCaminhofoto() {
+        return caminhofoto;
+    }
+
+    public void setCaminhofoto(String caminhofoto) {
+        this.caminhofoto = caminhofoto;
+    }
+
+
 
     // Alt insert para gerar getters e setters
 
